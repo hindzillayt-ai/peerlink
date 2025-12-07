@@ -27,7 +27,7 @@ outputType = "webview"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd \"mini project - Copy\" && npm install && node server.js"
+args = "npm install && node server.js"
 waitForPort = 5000
 
 [[ports]]

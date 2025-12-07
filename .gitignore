@@ -1,0 +1,9 @@
+node_modules/
+.cache/
+.local/
+.replit
+replit.md
+attached_assets/
+uploads/
+*.log
+.DS_Store
