@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PEERLINK - Login</title>
+    <link rel="icon" type="image/png" href="peerlink-icon.png">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1A1A2E 0%, #16213E 100%);
+            padding: 20px;
+        }
+
+        .login-box {
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            border-radius: 20px;
+            padding: 25px;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: 0 0 30px rgba(138, 43, 226, 0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .login-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            box-shadow: 0 0 30px rgba(138, 43, 226, 0.6);
+            animation: logoFloat 3s ease-in-out infinite, logoGlow 2s ease-in-out infinite alternate;
+            overflow: hidden;
+        }
+
+        .login-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 16px;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes logoGlow {
+            0% { box-shadow: 0 0 20px rgba(138, 43, 226, 0.4), 0 0 40px rgba(0, 191, 255, 0.2); }
+            100% { box-shadow: 0 0 35px rgba(138, 43, 226, 0.7), 0 0 60px rgba(0, 191, 255, 0.4); }
+        }
+
+        .login-title {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #8A2BE2, #00BFFF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 6px;
+        }
+
+        .login-subtitle {
+            font-size: 13px;
+            color: #B0B0B0;
+            font-weight: 300;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #FFFFFF;
+            margin-bottom: 6px;
+        }
+
+        .form-label .required {
+            color: #FF6B6B;
+            margin-left: 3px;
+        }
+
+        .form-input {
+            width: 100%;
+            background: rgba(26, 26, 46, 0.8);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            border-radius: 10px;
+            padding: 10px 14px;
+            color: #FFFFFF;
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: #8A2BE2;
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.3);
+            background: rgba(26, 26, 46, 0.9);
+        }
+
+        .form-input::placeholder {
+            color: #888;
+        }
+
+        .file-upload-area {
+            border: 2px dashed rgba(138, 43, 226, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            background: rgba(26, 26, 46, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload-area:hover {
+            border-color: #8A2BE2;
+            background: rgba(138, 43, 226, 0.1);
+        }
+
+        .file-upload-area.dragover {
+            border-color: #00BFFF;
+            background: rgba(0, 191, 255, 0.1);
+        }
+
+        .file-upload-icon {
+            font-size: 28px;
+            color: #8A2BE2;
+            margin-bottom: 8px;
+        }
+
+        .file-upload-text {
+            color: #FFFFFF;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .file-upload-hint {
+            color: #888;
+            font-size: 11px;
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        .file-name {
+            color: #00BFFF;
+            font-size: 13px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .file-name.show {
+            display: block;
+        }
+
+        #login-form {
+            display: flex;
+            flex-direction: column;
+            min-height: fit-content;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #8A2BE2, #00BFFF);
+            border: none;
+            border-radius: 10px;
+            color: #FFFFFF;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.4);
+            margin-top: 8px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(138, 43, 226, 0.6);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-message {
+            color: #FF6B6B;
+            font-size: 13px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        @media (max-width: 480px) {
+            .login-box {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <div class="login-header">
+                <div class="login-logo">
+                    <img src="peerlink-logo.png" alt="PEERLINK Logo">
+                </div>
+                <h1 class="login-title">PEERLINK</h1>
+                <p class="login-subtitle">Anonymous College Chat</p>
+            </div>
+
+            <form id="login-form">
+                <div class="form-group">
+                    <label class="form-label">
+                        Student Name <span class="required">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        class="form-input" 
+                        id="student-name" 
+                        placeholder="Enter your full name"
+                        required
+                    >
+                    <div class="error-message" id="name-error"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        College ID <span class="required">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        class="form-input" 
+                        id="college-id" 
+                        placeholder="Enter your college ID"
+                        required
+                    >
+                    <div class="error-message" id="college-id-error"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        Mobile Number <span class="required">*</span>
+                    </label>
+                    <input 
+                        type="tel" 
+                        class="form-input" 
+                        id="mobile-no" 
+                        placeholder="Enter your mobile number"
+                        required
+                    >
+                    <div class="error-message" id="mobile-error"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        College ID Upload <span class="required">*</span>
+                    </label>
+                    <div class="file-upload-area" id="file-upload-area">
+                        <i class="fas fa-cloud-upload-alt file-upload-icon"></i>
+                        <div class="file-upload-text">Click to upload or drag and drop</div>
+                        <div class="file-upload-hint">PDF, JPG, PNG (Max 5MB)</div>
+                        <input type="file" id="file-input" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <div class="file-name" id="file-name"></div>
+                    </div>
+                    <div class="error-message" id="file-error"></div>
+                </div>
+
+                <button type="submit" class="login-btn" id="submit-btn">
+                    <i class="fas fa-sign-in-alt"></i> Login to PEERLINK
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // File upload handling
+        const fileInput = document.getElementById('file-input');
+        const fileUploadArea = document.getElementById('file-upload-area');
+        const fileName = document.getElementById('file-name');
+
+        fileUploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                // Validate file size (5MB max)
+                if (file.size > 5 * 1024 * 1024) {
+                    showError('file-error', 'File size must be less than 5MB');
+                    fileInput.value = '';
+                    return;
+                }
+
+                fileName.textContent = `Selected: ${file.name}`;
+                fileName.classList.add('show');
+                hideError('file-error');
+            }
+        });
+
+        // Drag and drop
+        fileUploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileUploadArea.classList.add('dragover');
+        });
+
+        fileUploadArea.addEventListener('dragleave', () => {
+            fileUploadArea.classList.remove('dragover');
+        });
+
+        fileUploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileUploadArea.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                fileInput.files = e.dataTransfer.files;
+                if (file.size > 5 * 1024 * 1024) {
+                    showError('file-error', 'File size must be less than 5MB');
+                    return;
+                }
+                fileName.textContent = `Selected: ${file.name}`;
+                fileName.classList.add('show');
+                hideError('file-error');
+            }
+        });
+
+        // Form validation
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.classList.add('show');
+        }
+
+        function hideError(elementId) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.classList.remove('show');
+        }
+
+        // Form submission
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // Get form values
+            const studentName = document.getElementById('student-name').value.trim();
+            const collegeId = document.getElementById('college-id').value.trim();
+            const mobileNo = document.getElementById('mobile-no').value.trim();
+            const file = fileInput.files[0];
+
+            // Clear previous errors
+            ['name-error', 'college-id-error', 'mobile-error', 'file-error'].forEach(id => hideError(id));
+
+            let hasError = false;
+
+            // Validate name
+            if (!studentName || studentName.length < 2) {
+                showError('name-error', 'Please enter a valid name');
+                hasError = true;
+            }
+
+            // Validate college ID
+            if (!collegeId || collegeId.length < 3) {
+                showError('college-id-error', 'Please enter a valid college ID');
+                hasError = true;
+            }
+
+            // Validate mobile number
+            const mobileRegex = /^[0-9]{10}$/;
+            if (!mobileNo || !mobileRegex.test(mobileNo)) {
+                showError('mobile-error', 'Please enter a valid 10-digit mobile number');
+                hasError = true;
+            }
+
+            // Validate file
+            if (!file) {
+                showError('file-error', 'Please upload your college ID');
+                hasError = true;
+            }
+
+            if (hasError) {
+                return;
+            }
+
+            // Store login info in sessionStorage (not localStorage for privacy)
+            const loginData = {
+                studentName: studentName,
+                collegeId: collegeId,
+                mobileNo: mobileNo,
+                loginTime: new Date().toISOString(),
+                fileName: file.name
+            };
+            
+            sessionStorage.setItem('peerlink_login', JSON.stringify(loginData));
+
+            // Redirect to main chat app
+            window.location.href = 'index.html';
+        });
+
+        // Check if already logged in
+        if (sessionStorage.getItem('peerlink_login')) {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

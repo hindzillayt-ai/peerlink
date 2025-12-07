@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PEERLINK - Anonymous College Chat</title>
+    <link rel="icon" type="image/png" href="peerlink-icon.png">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="branding">
+                <div class="logo">
+                    <img src="peerlink-logo.png" alt="PEERLINK Logo">
+                </div>
+                <h1 class="app-name">PEERLINK</h1>
+                <p class="tagline">Study . Chat . Have Fun</p>
+            </div>
+
+            <div class="channels-section">
+                <h3 class="section-title">CHANNELS</h3>
+                <div class="channel-list">
+                    <div class="channel active" data-channel="general-chat">
+                        <i class="fas fa-hashtag"></i>
+                        <span>general-chat</span>
+                    </div>
+                    <div class="channel" data-channel="exam-prep">
+                        <i class="fas fa-hashtag"></i>
+                        <span>exam-prep</span>
+                    </div>
+                    <div class="channel" data-channel="campus-events">
+                        <i class="fas fa-hashtag"></i>
+                        <span>campus-events</span>
+                    </div>
+                    <div class="channel" data-channel="mental-health-support">
+                        <i class="fas fa-hashtag"></i>
+                        <span>mental-health-support</span>
+                    </div>
+                    <div class="channel" data-channel="buy-and-sell">
+                        <i class="fas fa-hashtag"></i>
+                        <span>buy-and-sell</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="online-users-section">
+                <h3 class="section-title">ONLINE NOW</h3>
+                <div class="online-users-list" id="online-users-list">
+                </div>
+            </div>
+
+            <div class="user-section">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user-secret"></i>
+                    </div>
+                    <span class="user-name">Anonymous User</span>
+                    <span class="user-rizz" id="user-rizz">
+                        <i class="fas fa-fire-alt"></i>
+                        <span id="user-rizz-count">0</span>
+                    </span>
+                    <button class="logout-btn" id="logout-btn" title="Log out">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+                <button class="settings-btn">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                </button>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="channel-header">
+                <div class="channel-info">
+                    <h2 class="channel-name"># general-chat</h2>
+                    <p class="channel-description">General discussions and casual conversations</p>
+                </div>
+                <div class="online-indicator">
+                    <div class="online-dot"></div>
+                    <span class="online-count">0 students online</span>
+                </div>
+            </div>
+
+            <div class="messages-container">
+                <div class="messages" id="messages">
+                    <div class="welcome-message">
+                        <h3>Welcome to # general-chat!</h3>
+                        <p>General discussions and casual conversations</p>
+                        <p>Be the first to start the fun! Drop a message, share a meme, or just say hi!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="typing-indicator" id="typing-indicator" style="display: none;">
+                <span class="typing-text">Someone is typing...</span>
+            </div>
+
+            <div class="reply-preview" id="reply-preview" style="display: none;">
+                <div class="reply-preview-content">
+                    <i class="fas fa-reply"></i>
+                    <span class="reply-preview-text"></span>
+                </div>
+                <button class="cancel-reply-btn" id="cancel-reply">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="media-preview" id="media-preview" style="display: none;">
+                <div class="media-preview-content">
+                    <img id="preview-image" src="" alt="Preview">
+                    <span class="media-file-name" id="media-file-name"></span>
+                </div>
+                <button class="cancel-media-btn" id="cancel-media">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="message-input-container">
+                <div class="input-actions">
+                    <button class="action-btn" id="attach-btn" title="Attach file">
+                        <i class="fas fa-paperclip"></i>
+                    </button>
+                    <input type="file" id="file-input" accept="image/*,video/*,.pdf,.doc,.docx,.txt" style="display: none;">
+                    <button class="action-btn" id="emoji-btn" title="Add emoji">
+                        <i class="far fa-smile"></i>
+                    </button>
+                    <button class="action-btn" id="sticker-btn" title="Send sticker">
+                        <i class="fas fa-sticky-note"></i>
+                    </button>
+                    <input type="file" id="sticker-upload-input" accept="image/*" style="display: none;">
+                </div>
+                <div class="input-wrapper">
+                    <textarea 
+                        id="message-input" 
+                        placeholder="Type your message..."
+                        rows="1"
+                    ></textarea>
+                </div>
+                <button class="send-btn" id="send-btn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="emoji-modal">
+        <div class="modal-content emoji-picker">
+            <div class="modal-header">
+                <h3>Choose an Emoji</h3>
+                <button class="close-btn" id="close-emoji">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="emoji-categories">
+                    <button class="emoji-category active" data-category="smileys">&#128512;</button>
+                    <button class="emoji-category" data-category="people">&#128075;</button>
+                    <button class="emoji-category" data-category="animals">&#128054;</button>
+                    <button class="emoji-category" data-category="food">&#127829;</button>
+                    <button class="emoji-category" data-category="activities">&#9917;</button>
+                    <button class="emoji-category" data-category="objects">&#128241;</button>
+                    <button class="emoji-category" data-category="symbols">&#10084;&#65039;</button>
+                </div>
+                <div class="emoji-grid" id="emoji-grid">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="sticker-modal">
+        <div class="modal-content sticker-picker">
+            <div class="modal-header">
+                <h3>Choose a Sticker</h3>
+                <button class="close-btn" id="close-sticker">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="sticker-categories">
+                    <button class="sticker-category active" data-category="favorites">
+                        <i class="fas fa-heart"></i> Favorites
+                    </button>
+                    <button class="sticker-category" data-category="my-stickers">
+                        <i class="fas fa-user"></i> My Stickers
+                    </button>
+                    <button class="sticker-category" data-category="default">
+                        <i class="fas fa-star"></i> Default
+                    </button>
+                </div>
+                <div class="sticker-grid" id="sticker-grid">
+                </div>
+                <div class="sticker-upload-section">
+                    <button class="sticker-upload-btn" id="add-sticker-btn">
+                        <i class="fas fa-plus"></i> Add Custom Sticker
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="settings-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Settings</h3>
+                <button class="close-btn" id="close-settings">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-item">
+                    <label>Theme</label>
+                    <select id="theme-select">
+                        <option value="neon-noir" selected>Neon Noir</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label>Notifications</label>
+                    <input type="checkbox" id="notifications" checked>
+                </div>
+                <div class="setting-item">
+                    <label>Sound Effects</label>
+                    <input type="checkbox" id="sound-effects" checked>
+                </div>
+                <div class="setting-item">
+                    <label>Save Chat History</label>
+                    <input type="checkbox" id="save-chat" checked>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="image-modal">
+        <div class="image-modal-content">
+            <button class="close-btn image-close-btn" id="close-image">
+                <i class="fas fa-times"></i>
+            </button>
+            <img id="fullsize-image" src="" alt="Full size image">
+        </div>
+    </div>
+
+    <audio id="notification-sound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2teleS8LE4nV7bia" type="audio/wav">
+    </audio>
+
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
