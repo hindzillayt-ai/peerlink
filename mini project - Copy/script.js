@@ -90,9 +90,23 @@ class PeerLinkApp {
 
     connectToServer() {
         try {
+            const isStaticHost = window.location.hostname.includes('netlify') || 
+                                 window.location.hostname.includes('vercel') ||
+                                 window.location.hostname.includes('github.io') ||
+                                 window.location.hostname.includes('pages.dev');
+            
+            if (isStaticHost) {
+                console.log('Static hosting detected - real-time features require a backend server');
+                this.showStaticModeMessage();
+                return;
+            }
+            
             this.socket = io(window.location.origin, {
                 transports: ['websocket', 'polling'],
-                path: '/socket.io/'
+                path: '/socket.io/',
+                reconnectionAttempts: 5,
+                reconnectionDelay: 1000,
+                timeout: 10000
             });
             
             this.socket.on('connect', () => {
@@ -105,8 +119,11 @@ class PeerLinkApp {
             });
 
             this.socket.on('connect_error', (error) => {
-                console.error('Connection error:', error);
-                this.showNotification('Connection error. Please refresh the page.');
+                if (this.socket.io._reconnectionAttempts >= 5) {
+                    console.log('Server not available - running in offline mode');
+                    this.showStaticModeMessage();
+                    this.socket.disconnect();
+                }
             });
 
             this.socket.on('message', (data) => {
@@ -163,8 +180,36 @@ class PeerLinkApp {
                 this.updateAllRizzBadges();
             });
         } catch (error) {
-            console.error('Failed to initialize socket:', error);
-            this.showNotification('Failed to connect to server. Please check your connection.');
+            console.log('Socket initialization skipped');
+            this.showStaticModeMessage();
+        }
+    }
+
+    showStaticModeMessage() {
+        const messagesContainer = document.getElementById('messages');
+        const welcomeMessage = document.querySelector('.welcome-message');
+        
+        if (welcomeMessage) {
+            welcomeMessage.innerHTML = `
+                <h3>Welcome to PEERLINK!</h3>
+                <p>This is a demo preview of the chat interface.</p>
+                <p style="color: #ff9800; margin-top: 15px;">
+                    <strong>Note:</strong> Real-time chat requires a backend server. 
+                    To use live chat features, deploy the full application on a platform that supports Node.js 
+                    (like Replit, Render, Railway, or Heroku).
+                </p>
+            `;
+        }
+        
+        const messageInput = document.getElementById('message-input');
+        const sendBtn = document.getElementById('send-btn');
+        if (messageInput) {
+            messageInput.placeholder = 'Chat unavailable in demo mode...';
+            messageInput.disabled = true;
+        }
+        if (sendBtn) {
+            sendBtn.disabled = true;
+            sendBtn.style.opacity = '0.5';
         }
     }
 
