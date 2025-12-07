@@ -90,7 +90,10 @@ class PeerLinkApp {
 
     connectToServer() {
         try {
-            this.socket = io();
+            this.socket = io(window.location.origin, {
+                transports: ['websocket', 'polling'],
+                path: '/socket.io/'
+            });
             
             this.socket.on('connect', () => {
                 console.log('Connected to server');
